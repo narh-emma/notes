@@ -1,6 +1,7 @@
 import connectToDatabase from "@/src/lib/db";
 import User from "@/src/lib/models/user";
 import bcrypt from "bcryptjs";
+import { error } from "console";
 import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
@@ -10,7 +11,7 @@ export async function POST(request: Request) {
 
     if (!email || !password) {
       return Response.json(
-        { message: "Email and password are required" },
+        { error: "Email and password are required" },
         { status: 400 }
       );
     }
@@ -18,14 +19,14 @@ export async function POST(request: Request) {
     const user = await User.findOne({ email });
     if (!user) {
       return Response.json(
-        { message: "Invalid email or password" },
+        { error: "Invalid email or password" },
         { status: 401 }
       );
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
-      return Response.json({ message: "Invalid email or password" }, { status: 401 });
+      return Response.json({ error : "Invalid email or password" }, { status: 401 });
     }
 
     const jwtSecret = process.env.JWT_SECRET;

@@ -11,7 +11,7 @@ export async function GET(
     try {
             const userId = await getUserIdFromCookies()
             if(!userId){
-                return(Response.json({message: "Not authenticated"},{status: 401}))
+                return(Response.json({error: "Not authenticated"},{status: 401}))
             }
 
         await connectToDatabase()
@@ -37,7 +37,7 @@ export async function PUT(request: Request,
     try {
         const userId = await getUserIdFromCookies()
             if(!userId){
-                return(Response.json({message: "Not authenticated"},{status: 401}))
+                return(Response.json({error : "Not authenticated"},{status: 401}))
             }
         
         await connectToDatabase()
@@ -65,7 +65,7 @@ export async function DELETE(
     try {
                 const userId = await getUserIdFromCookies()
             if(!userId){
-                return(Response.json({message: "Not authenticated"},{status: 401}))
+                return(Response.json({error : "Not authenticated"},{status: 401}))
             }
         
         await connectToDatabase()
@@ -76,7 +76,7 @@ export async function DELETE(
             return Response.json({ error: "Note not found" }, { status: 404 })
         }
 
-        return Response.json({ message: "Note deleted" }, { status: 200 })
+        return Response.json({ error : "Note deleted" }, { status: 200 })
     } catch (error) {
         console.error(error)
         return Response.json({ error: "An error has occured" }, { status: 500 })

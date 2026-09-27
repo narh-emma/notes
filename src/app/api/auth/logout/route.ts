@@ -1,5 +1,6 @@
 
 
+import { error } from "console"
 import { cookies } from "next/headers"
 
 export async function POST(_request: Request) {
@@ -12,7 +13,7 @@ export async function POST(_request: Request) {
     path: "/",
     })
     
-    return( Response.json({message: "User successfully logged out"}, {status: 200}))
+    return( Response.json({error : "User successfully logged out"}, {status: 200}))
 }
 
 

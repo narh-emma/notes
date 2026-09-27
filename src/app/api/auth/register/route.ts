@@ -1,6 +1,7 @@
 import connectToDatabase from "@/src/lib/db"
 import User from "@/src/lib/models/user"
 import bcrypt from "bcryptjs"
+import { error } from "console"
 
 
 export async function POST(request: Request) {
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
     
     const lookUpEmail = await User.findOne({ email })
     if(lookUpEmail){
-        return( Response.json({message: "Email already exist"}, {status: 409}))
+        return( Response.json({error : "Email already exist"}, {status: 409}))
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)

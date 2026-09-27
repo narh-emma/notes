@@ -24,7 +24,7 @@ export async function GET(_request: Request) {
         } });        
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError || error instanceof jwt.TokenExpiredError) {
-        return Response.json({ message: "Invalid or expired token" }, { status: 401 })
+        return Response.json({ error: "Invalid or expired token" }, { status: 401 })
         }
         console.error(error)
         return Response.json({ error: "An error occurred" }, { status: 500 })

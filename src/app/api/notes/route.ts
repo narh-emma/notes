@@ -41,7 +41,7 @@ export async function  POST(request: Request) {
     try {
         const userId = await getUserIdFromCookies()
         if(!userId){
-            return(Response.json({message: "Not authenticated"},{status: 401}))
+            return(Response.json({error : "Not authenticated"},{status: 401}))
         }
 
         await connectToDatabase()
