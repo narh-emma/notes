@@ -1,6 +1,7 @@
 import { getUserIdFromCookies } from "@/src/lib/auth";
 import connectToDatabase from "@/src/lib/db";
 import Note from "@/src/lib/models/note";
+import { CreateNoteSchema } from "@/src/lib/validators/note";
 import { responseCookiesToRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { NextRequest } from "next/server";
 
@@ -44,10 +45,15 @@ export async function  POST(request: Request) {
             return(Response.json({error : "Not authenticated"},{status: 401}))
         }
 
+        const body = await request.json()
+
         await connectToDatabase()
-        const {title, content} = await request.json()
-
-
+        const result = CreateNoteSchema.safeParse(body)
+        if(!result.success){
+            return(Response.json({error: "Invalid Input"}, {status: 400}))
+        }
+        
+        const {title, content} = result.data
         return Response.json(await Note.create({title, content, userId}), {status: 201})        
     } catch (error) {
         console.log(error)

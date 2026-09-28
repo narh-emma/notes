@@ -2,6 +2,7 @@ import connectToDatabase from "@/src/lib/db";
 import Note from "@/src/lib/models/note";
 import { error } from "console";
 import { getUserIdFromCookies } from "@/src/lib/auth";
+import { updateNoteSchema } from "@/src/lib/validators/note";
 
 export async function GET(
 	_request: Request,
@@ -42,7 +43,14 @@ export async function PUT(request: Request,
         
         await connectToDatabase()
         const id = (await params).id
-        const note  = await request.json()
+        const body = await request.json()
+       
+
+        const result = updateNoteSchema.safeParse(body)
+        if(!result.success){
+            return(Response.json({error : "Invalid Input"}, {status: 400}))
+        }
+         const note  = result.data
 
         const modNote = await Note.findOneAndUpdate({_id: id,userId },note,{ new: true, runValidators: true })
 
@@ -76,7 +84,7 @@ export async function DELETE(
             return Response.json({ error: "Note not found" }, { status: 404 })
         }
 
-        return Response.json({ error : "Note deleted" }, { status: 200 })
+        return Response.json({ message : "Note deleted" }, { status: 200 })
     } catch (error) {
         console.error(error)
         return Response.json({ error: "An error has occured" }, { status: 500 })
